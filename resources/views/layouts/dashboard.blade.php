@@ -45,7 +45,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
 
                         <li class="nav-item">
-                        <a href="{{ route('apply.loan') }}" class="nav-link">Apply Loan</a>
+                        <a href="/loans/apply" class="nav-link">Apply Loan</a>
+                        </li>
+                        <li class="nav-item">
+                        <a href="/profile/details" class="nav-link">Profile</a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('logout') }}" class="nav-link">Logout</a>
