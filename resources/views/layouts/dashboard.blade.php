@@ -26,8 +26,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <nav class="main-header navbar navbar-expand-md navbar-dark navbar-dark">
             <div class="container">
                 <a href="{{ url('/') }}" class="navbar-brand">
-                    <img src="{{ asset('assets/images/corefund.png') }}" alt="PCEA Logo" class="brand-image elevation-3"
-                        style="opacity: .8">
+                   
                     <span class="brand-text font-weight-light"><b>{{ env('APP_NAME') }}</b></span>
                 </a>
 
