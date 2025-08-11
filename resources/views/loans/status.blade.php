@@ -103,9 +103,7 @@
                             </button>
                         @endif
 
-                        <a href="{{ route('loan.offer', $loan) }}" class="btn btn-info">
-                            <i class="fas fa-file-alt"></i> View Offer Letter
-                        </a>
+                        
                     </div>
                 </div>
             </div>
