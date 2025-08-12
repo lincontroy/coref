@@ -100,34 +100,7 @@
                 </div>
             </div>
 
-            <div class="mt-4">
-                @if($loan->status == 'pending')
-                <form action="{{ route('admin.loans.approve', $loan) }}" method="POST" class="d-inline">
-                    @csrf
-                    <div class="form-group">
-                        <label for="approved_amount">Approved Amount (KES)</label>
-                        <input type="number" class="form-control" id="approved_amount" name="approved_amount" 
-                               value="{{ $loan->requested_amount }}" min="1000" max="{{ $loan->requested_amount }}" required>
-                    </div>
-                    <button type="submit" class="btn btn-success">
-                        <i class="fas fa-check"></i> Approve Loan
-                    </button>
-                </form>
-                <form action="{{ route('admin.loans.reject', $loan) }}" method="POST" class="d-inline ml-2">
-                    @csrf
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-times"></i> Reject Loan
-                    </button>
-                </form>
-                @elseif($loan->status == 'approved')
-                <form action="{{ route('admin.loans.disburse', $loan) }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-money-bill-wave"></i> Disburse to Wallet
-                    </button>
-                </form>
-                @endif
-            </div>
+         
         </div>
     </div>
 </div>
