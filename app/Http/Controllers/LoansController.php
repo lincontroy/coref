@@ -41,7 +41,7 @@ class LoansController extends Controller
                 'approved_amount' => $approvedAmount,
                 'repayment_period' => $validated['repayment_period'],
                 'application_fee' => $applicationFee,
-                'status' => $approvedAmount > 0 ? 'approved' : 'rejected',
+                'status' => 'pending',
                 'due_date' => now()->addDays($validated['repayment_period']),
             ]);
 

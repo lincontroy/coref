@@ -21,7 +21,7 @@ $totalBorrowed = $user->loans()->whereIn('status', ['disbursed', 'repaid'])->sum
         <!-- small card -->
         <div class="small-box bg-info">
             <div class="inner">
-                <h3>{{ $totalLoans }}</h3>
+                <h5>{{ $totalLoans }}</h5>
                 <p>Total Loans</p>
             </div>
             <div class="icon">
@@ -34,7 +34,7 @@ $totalBorrowed = $user->loans()->whereIn('status', ['disbursed', 'repaid'])->sum
         <!-- small card -->
         <div class="small-box bg-success">
             <div class="inner">
-                <h3>KES {{ number_format($outstandingBalance, 2) }}</h3>
+                <h5>KES {{ number_format($outstandingBalance, 2) }}</h5>
                 <p>Outstanding Loan Balance</p>
             </div>
             <div class="icon">
@@ -47,7 +47,7 @@ $totalBorrowed = $user->loans()->whereIn('status', ['disbursed', 'repaid'])->sum
         <!-- small card -->
         <div class="small-box bg-warning">
             <div class="inner">
-                <h3>KES {{ number_format($totalBorrowed, 2) }}</h3>
+                <h5>KES {{ number_format($totalBorrowed, 2) }}</h5>
                 <p>Accumulated loans</p>
             </div>
             <div class="icon">
@@ -60,7 +60,7 @@ $totalBorrowed = $user->loans()->whereIn('status', ['disbursed', 'repaid'])->sum
         <!-- small card -->
         <div class="small-box bg-danger">
             <div class="inner">
-                <h3>{{ $approvedLoans }}</h3>
+                <h5>{{ $approvedLoans }}</h5>
                 <p>Approved Loans</p>
             </div>
             <div class="icon">

@@ -50,16 +50,18 @@
                         <div class="col-md-6">
                             <h5>Timeline</h5>
                             <table class="table table-sm">
-                                <tr>
-                                    <th>Applied On</th>
-                                    <td>{{ $loan->created_at->format('M d, Y h:i A') }}</td>
-                                </tr>
-                                @if($loan->disbursed_at)
-                                <tr>
-                                    <th>Disbursed On</th>
-                                    <td>{{ $loan->disbursed_at->format('M d, Y h:i A') }}</td>
-                                </tr>
-                                @endif
+                            <tr>
+                                <th>Applied On</th>
+                                <td>{{ $loan->created_at->timezone(auth()->user()->timezone ?? config('app.timezone'))->format('M d, Y h:i A') }}</td>
+                            </tr>
+                            @if($loan->disbursed_at)
+                            <tr>
+                                <th>Disbursed On</th>
+                                <td>
+    {{ $loan->disbursed_at ? Carbon\Carbon::parse($loan->disbursed_at)->timezone(auth()->user()->timezone ?? config('app.timezone'))->format('M d, Y h:i A') : 'N/A' }}
+</td> </tr>
+                            @endif
+                             
                                 <tr>
                                     <th>Repayment Period</th>
                                     <td>{{ $loan->repayment_period }} days</td>
@@ -97,11 +99,7 @@
                             </a>
                         @endif
 
-                        @if($loan->status == 'disbursed')
-                            <button class="btn btn-success" data-toggle="modal" data-target="#makePaymentModal">
-                                <i class="fas fa-coins"></i> Make Payment
-                            </button>
-                        @endif
+                       
 
                         
                     </div>

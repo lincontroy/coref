@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoansController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\LoanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,4 +53,13 @@ Route::middleware(['auth'])->prefix('loans')->group(function() {
     Route::get('/confirm-payment/{loan}', [LoansController::class, 'confirmPayment'])->name('loan.confirm_payment');
     Route::post('/disburse/{loan}', [LoansController::class, 'disburse'])->name('loan.disburse');
     Route::get('/status/{loan}', [LoansController::class, 'showStatus'])->name('loan.status');
+});
+
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/loans', [LoanController::class, 'index'])->name('admin.loans.index');
+    Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('admin.loans.show');
+    Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('admin.loans.approve');
+    Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('admin.loans.reject');
+    Route::post('/loans/{loan}/disburse', [LoanController::class, 'disburse'])->name('admin.loans.disburse');
 });
