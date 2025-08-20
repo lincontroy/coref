@@ -377,7 +377,7 @@
             $('#total_monthly_income').val(monthlyIncome);
         });
 
-        // Show success message if forms are saved
+        // Show success message if employment form is saved
         @if(session('employment_success'))
             Swal.fire({
                 icon: 'success',
@@ -387,14 +387,22 @@
             });
         @endif
 
+        // Show success message with button for financial form
         @if(session('financial_success'))
             Swal.fire({
                 icon: 'success',
                 title: 'Success!',
                 text: '{{ session('financial_success') }}',
-                timer: 3000
+                showCancelButton: false,
+                confirmButtonText: 'Apply for Loan',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "{{ route('loan.apply') }}"; 
+                }
             });
         @endif
     });
 </script>
+
 @endsection

@@ -45,8 +45,20 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('loans')->group(function() {
+    Route::get('/cars', [LoansController::class, 'cars'])->name('loan.cars');
+    Route::get('/cars/{id}', [LoansController::class, 'carDetails'])->name('loan.carDetails');
+Route::get('/bodaboda', [LoansController::class, 'bodaboda'])->name('loan.bodaboda');
+Route::get('/education', [LoansController::class, 'education'])->name('loan.education');
+Route::get('/kilimo', [LoansController::class, 'kilimo'])->name('loan.kilimo');
+Route::get('/emergency', [LoansController::class, 'emergency'])->name('loan.emergency');
+Route::get('/business', [LoansController::class, 'business'])->name('loan.business');
+
+
     Route::get('/apply', [LoansController::class, 'showApplicationForm'])->name('loan.apply');
     Route::post('/apply', [LoansController::class, 'apply'])->name('loan.submit');
+    Route::get('/car/apply/{id}', [LoansController::class, 'carapply'])->name('car.loan.apply');
+    Route::post('/apply/{id}/pay', [LoansController::class, 'processPayment'])->name('loan.processPayment');
+    
     Route::post('/{loan}/payment', [LoansController::class, 'processPayment'])->name('loan.payment');
     Route::get('/offer/{loan}', [LoansController::class, 'showOffer'])->name('loan.offer');
     Route::get('/pay-fee/{loan}', [LoansController::class, 'payFee'])->name('loan.pay_fee');

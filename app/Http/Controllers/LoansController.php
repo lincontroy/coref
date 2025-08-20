@@ -11,50 +11,162 @@ use Illuminate\Support\Facades\DB;
 
 class LoansController extends Controller
 {
+
+    public function carapply($id)
+{
+    // Hardcoded vehicle data (later move to DB)
+    $vehicles = [
+        1 => ['id'=>'1', 'name' => 'Toyota Corolla 2020', 'price' => 1200000],
+        2 => ['id'=>'2','name' => 'Nissan X-Trail 2019', 'price' => 1800000],
+        3 => ['id'=>'3','name' => 'Mazda Demio 2018', 'price' => 850000],
+    ];
+
+    $vehicle = $vehicles[$id] ?? null;
+
+    if (!$vehicle) {
+        abort(404);
+    }
+
+    // Calculate 15% deposit
+    $deposit = $vehicle['price'] * 0.15;
+
+    return view('loans.carapply', compact('vehicle', 'deposit'));
+}
+
+public function processPayment(Request $request, $id)
+{
+    // get vehicle price (in real app from DB)
+    $vehicles = [
+        1 => ['name' => 'Toyota Corolla 2020', 'price' => 1200000],
+        2 => ['name' => 'Nissan X-Trail 2019', 'price' => 1800000],
+        3 => ['name' => 'Mazda Demio 2018', 'price' => 850000],
+    ];
+
+    $vehicle = $vehicles[$id] ?? null;
+    if (!$vehicle) abort(404);
+
+    $deposit = $vehicle['price'] * 0.15;
+
+    $loan = Loans::create([
+        'user_id'          => Auth::id(),  // logged-in user
+        'purpose'          => "Vehicle Purchase - " . $vehicle['name'],
+        'requested_amount' => $vehicle['price'],
+        'approved_amount'  => $vehicle['price'], // for now approve full price
+        'repayment_period' => 24, // e.g. 24 months, adjust as needed
+        'application_fee'  => $deposit, // depends on your business logic
+        'fee_paid'         => 0,
+        'status'           => 'pending', // until payment confirmed
+        'disbursed_at'     => null,
+        'due_date'         => now()->addMonths(24),
+    ]);
+
+    // 👉 Here you trigger your payment gateway (e.g. STK Push for M-Pesa)
+    // Example placeholder:
+    // $this->sendStkPush($request->phone, $deposit);
+
+    return back()->with('success', "Please pay KES " . number_format($deposit) . " as your deposit. STK sent");
+}
+
+    
     public function showApplicationForm()
     {
         return view('loans.apply');
     }
+    public function cars()
+{
+    // Example vehicle data (later you can fetch from DB)
+    $vehicles = [
+        [
+            'id' => 1,
+            'name' => 'Toyota Corolla 2020',
+            'price' => 'KES 1,200,000',
+            'image' => 'images/cars/toyota-corolla.jpg',
+            'description' => 'Reliable and fuel efficient sedan perfect for city and long drives.'
+        ],
+        [
+            'id' => 2,
+            'name' => 'Nissan X-Trail 2019',
+            'price' => 'KES 1,800,000',
+            'image' => 'images/cars/nissan-xtrail.jpg',
+            'description' => 'Spacious SUV with modern features and off-road capability.'
+        ],
+        [
+            'id' => 3,
+            'name' => 'Mazda Demio 2018',
+            'price' => 'KES 850,000',
+            'image' => 'images/cars/mazda-demio.jpg',
+            'description' => 'Compact and stylish hatchback, ideal for daily commuting.'
+        ]
+    ];
 
-    public function apply(Request $request)
-    {
-        $validated = $request->validate([
-            'purpose' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:1000|max:500000',
-            'repayment_period' => 'required|in:30,90,180,360',
-        ]);
+    return view('loans.cars', compact('vehicles'));
+}
 
-        DB::beginTransaction();
-        try {
-            $user = Auth::user();
-            
-            // Calculate application fee (2% of requested amount)
-            $applicationFee = $validated['amount'] * 0.02;
-            
-            // Determine approved amount based on eligibility
-            $approvedAmount = $this->calculateEligibleAmount($user, $validated['amount']);
-            
-            $loan = Loans::create([
-                'user_id' => $user->id,
-                'purpose' => $validated['purpose'],
-                'requested_amount' => $validated['amount'],
-                'approved_amount' => $approvedAmount,
-                'repayment_period' => $validated['repayment_period'],
-                'application_fee' => $applicationFee,
-                'status' => 'pending',
-                'due_date' => now()->addDays($validated['repayment_period']),
-            ]);
+public function carDetails($id)
+{
 
-            DB::commit();
+    // dd($id);
+    // Normally you'd fetch from DB
+    $vehicles = [
+        1 => [
+            'id' => 1,
+            'name' => 'Toyota Corolla 2020',
+            'price' => 'KES 1,200,000',
+            'image' => 'images/cars/toyota-corolla.jpg',
+            'description' => 'Reliable and fuel efficient sedan perfect for city and long drives. Financing available with flexible repayment terms.'
+        ],
+        2 => [
+            'id' => 2,
+            'name' => 'Nissan X-Trail 2019',
+            'price' => 'KES 1,800,000',
+            'image' => 'images/cars/nissan-xtrail.jpg',
+            'description' => 'Spacious SUV with modern features and off-road capability. Available with competitive car loan packages.'
+        ],
+        3 => [
+            'id' => 3,
+            'name' => 'Mazda Demio 2018',
+            'price' => 'KES 850,000',
+            'image' => 'images/cars/mazda-demio.jpg',
+            'description' => 'Compact and stylish hatchback, ideal for daily commuting. Easy financing options available.'
+        ],
+    ];
 
-            return redirect()->route('loan.offer', $loan)
-                ->with('success', 'Loan application submitted successfully');
+    $vehicle = $vehicles[$id] ?? null;
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Loan application failed: ' . $e->getMessage());
-        }
+    if (!$vehicle) {
+        abort(404);
     }
+    // dd($vehicle);
+
+    return view('loans.car-details', compact('vehicle'));
+}
+
+    public function bodaboda()
+    {
+        return view('loans.bodaboda');
+    }
+
+    public function education()
+    {
+        return view('loans.education');
+    }
+
+    public function kilimo()
+    {
+        return view('loans.kilimo');
+    }
+
+    public function emergency()
+    {
+        return view('loans.emergency');
+    }
+
+    public function business()
+    {
+        return view('loans.business');
+    }
+
+ 
 
     private function calculateEligibleAmount() {
         // dd(auth()->user()->monthly_income);
@@ -128,28 +240,6 @@ class LoansController extends Controller
         return view('loans.pay_fee', compact('loan'));
     }
 
-    public function processPayment(Request $request, Loans $loan)
-{
-    $validated = $request->validate([
-        'amount' => 'required|numeric|min:100|max:' . $loan->approved_amount * 1.15,
-        'method' => 'required|in:mpesa,bank'
-    ]);
-
-    // Process payment (in a real app, this would call your payment processor)
-    $payment = Payment::create([
-        'user_id' => Auth::id(),
-        'loan_id' => $loan->id,
-        'amount' => $validated['amount'],
-        'method' => $validated['method'],
-        'status' => 'pending'
-    ]);
-
-    // In a real app, you would dispatch a job to process the payment
-    // ProcessPayment::dispatch($payment);
-
-    return redirect()->route('loan.status', $loan)
-        ->with('success', 'Payment initiated. Please complete the payment process.');
-}
 
     public function confirmPayment(Loans $loan)
     {

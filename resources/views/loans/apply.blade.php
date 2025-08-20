@@ -3,59 +3,97 @@
 @section('content')
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Loan Application</div>
+        <div class="col-md-11">
+            <div class="card shadow">
+                <div class="card-header">Choose Loan Category</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('loan.apply') }}">
-                        @csrf
+                    <div class="row g-4">
 
-                        <div class="form-group mb-3">
-                            <label for="purpose">Purpose of Loan</label>
-                            <select class="form-control" id="purpose" name="purpose" required>
-                                <option value="">Select purpose</option>
-                                <option value="Business">Business</option>
-                                <option value="Education">Education</option>
-                                <option value="Emergency">Emergency</option>
-                                <option value="Home Improvement">Home Improvement</option>
-                                <option value="Personal">Personal</option>
-                            </select>
+                        {{-- Car Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.cars') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-car fa-3x mb-3 text-primary"></i>
+                                    <h5>Car Loan</h5>
+                                    <p class="small text-muted">Own your dream car with flexible financing</p>
+                                </div>
+                            </a>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label for="amount">Loan Amount (KES)</label>
-                            <input type="number" class="form-control" id="amount" name="amount" 
-                                   min="1000" max="500000" step="100" required>
-                            <small class="text-muted">Minimum: 1,000 KES | Maximum: 500,000 KES</small>
+                        {{-- BodaBoda Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.bodaboda') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-motorcycle fa-3x mb-3 text-success"></i>
+                                    <h5>BodaBoda Loan</h5>
+                                    <p class="small text-muted">Affordable motorcycles with easy repayment</p>
+                                </div>
+                            </a>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <label>Repayment Period</label>
-                            <div class="btn-group w-100" role="group">
-                                <input type="radio" class="btn-check" name="repayment_period" id="30days" value="30" required>
-                                <label class="btn btn-outline-primary" for="30days">30 Days</label>
-
-                                <input type="radio" class="btn-check" name="repayment_period" id="90days" value="90">
-                                <label class="btn btn-outline-primary" for="90days">90 Days</label>
-
-                                <input type="radio" class="btn-check" name="repayment_period" id="6months" value="180">
-                                <label class="btn btn-outline-primary" for="6months">6 Months</label>
-
-                                <input type="radio" class="btn-check" name="repayment_period" id="12months" value="360">
-                                <label class="btn btn-outline-primary" for="12months">12 Months</label>
-                            </div>
+                        {{-- Education Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.education') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-graduation-cap fa-3x mb-3 text-info"></i>
+                                    <h5>Education Loan</h5>
+                                    <p class="small text-muted">Finance school & university fees with ease</p>
+                                </div>
+                            </a>
                         </div>
 
-                        <div class="form-group mb-3">
-                            <button type="submit" class="btn btn-primary w-100">
-                                Apply for Loan
-                            </button>
+                        {{-- Kilimo Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.kilimo') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-tractor fa-3x mb-3 text-warning"></i>
+                                    <h5>Kilimo Loan</h5>
+                                    <p class="small text-muted">Support for farmers & agribusiness projects</p>
+                                </div>
+                            </a>
                         </div>
-                    </form>
+
+                        {{-- Emergency Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.emergency') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-ambulance fa-3x mb-3 text-danger"></i>
+                                    <h5>Emergency Loan</h5>
+                                    <p class="small text-muted">Quick funds when you need them most</p>
+                                </div>
+                            </a>
+                        </div>
+
+                        {{-- Business Loan --}}
+                        <div class="col-md-4">
+                            <a href="{{ route('loan.business') }}" class="text-decoration-none">
+                                <div class="card text-center h-100 p-4 category-card">
+                                    <i class="fas fa-briefcase fa-3x mb-3 text-dark"></i>
+                                    <h5>Business Loan</h5>
+                                    <p class="small text-muted">Expand and grow your business operations</p>
+                                </div>
+                            </a>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .category-card {
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid #eee;
+        border-radius: 12px;
+    }
+    .category-card:hover {
+        transform: translateY(-5px);
+        background: #f8f9fa;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+</style>
 @endsection
