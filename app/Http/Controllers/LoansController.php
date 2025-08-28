@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Loans;
 use App\Models\UserDetails;
+use App\Models\LoanApply;
+use App\Models\BodaBoda;
+use App\Models\Vehicle;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,14 +15,214 @@ use Illuminate\Support\Facades\DB;
 class LoansController extends Controller
 {
 
+    public function bodaLoanApply($id)
+{
+    $boda = BodaBoda::findOrFail($id);
+
+    // Calculate 15% deposit
+    $deposit = $boda->price * 0.15;
+
+    return view('loans.apply-bodaboda-loann', compact('boda', 'deposit'));
+}
+
+public function processBodaDeposit(Request $request, $id)
+{
+    $request->validate([
+        'phone' => 'required|string|regex:/^254\d{9}$/',
+    ]);
+
+    $boda = BodaBoda::findOrFail($id);
+
+    $deposit = $boda->price * 0.15;
+
+    // Save loan application
+    $loan = Loans::create([
+        'user_id'          => Auth::id(),
+        'purpose'          => "Boda Boda Purchase - " . $boda->name,
+        'requested_amount' => $boda->price,
+        'approved_amount'  => $boda->price, // full amount for now
+        'repayment_period' => 24, // 24 months
+        'application_fee'  => $deposit,
+        'fee_paid'         => 0,
+        'status'           => 'pending',
+        'disbursed_at'     => null,
+        'due_date'         => now()->addMonths(24),
+    ]);
+
+    // Trigger payment gateway (example placeholder)
+    // $this->sendStkPush($request->phone, $deposit);
+
+    return back()->with('success', "Please pay KES " . number_format($deposit) . " as your deposit. STK push sent to {$request->phone}.");
+}
+
+    public function applyBodaBodaLoan($id)
+{
+    $boda = BodaBoda::findOrFail($id);
+    return view('loans.apply-bodaboda-loan', compact('boda'));
+}
+
+public function storeBodaBodaLoan(Request $request)
+{
+    $request->validate([
+        'boda_id' => 'required|exists:boda_bodas,id',
+        'loan_amount' => 'required|numeric|min:0',
+        'loan_purpose' => 'nullable|string|max:255',
+    ]);
+
+    $user = Auth::user();
+    $details = $user->getOrCreateUserDetails();
+    $boda = BodaBoda::findOrFail($request->boda_id);
+
+    // Processing fee = 1% of loan amount
+    $loanAmount = $request->loan_amount;
+    $processingFee = round($loanAmount * 0.01);
+
+    // Save loan application
+    $application = LoanApply::create([
+        'user_id' => $user->id,
+        'vehicle_id' => null,
+        'full_name' => $user->name,
+        'email' => $user->email,
+        'phone' => $details->mobile_money_account ?? $user->phone,
+        'id_number' => $details->id_number ?? '',
+        'employment_status' => $details->employment_status ?? '',
+        'company_name' => $details->employer_name ?? '',
+        'monthly_income' => $details->monthly_income ?? 0,
+        'loan_amount' => $loanAmount,
+        'loan_purpose' => $request->loan_purpose,
+        'boda_id' => $boda->id, // optional if you track boda separately
+    ]);
+
+    // Send SMS
+    $phone = auth()->user()->phone;
+    $phone = preg_replace('/^0/', '254', $phone); // format to 254
+
+    $smsMessage = "Hello {$user->name}, your Boda Boda loan application for {$boda->name} has been submitted successfully. Please pay KES " . number_format($processingFee) . " processing fee to start your ride!";
+    $this->sendSMSWithCurl($phone, $smsMessage);
+
+    // Redirect with success message and fee
+    $message = "Your Boda Boda loan application for <strong>{$boda->name}</strong> has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 123456 using your ID number.";
+
+    return redirect()->route('loan.bodaboda.apply', $boda->id)
+                     ->with('success', $message)
+                     ->with('processingFee', $processingFee);
+}
+
+    public function bodaDetails($id)
+    {
+        $boda = BodaBoda::findOrFail($id);
+    
+        return view('loans.boda-details', compact('boda'));
+    }
+    public function bodaboda()
+{
+    // Fetch all bodas from database
+    $bodas = BodaBoda::all();
+
+    return view('loans.bodabodas', compact('bodas'));
+}
+
+    public function loancarapply($id)
+{
+    $vehicle = Vehicle::findOrFail($id);
+    return view('loans.apply-car-loan', compact('vehicle'));
+}
+
+    public function storeLoanApplication(Request $request)
+    {
+        $request->validate([
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'loan_amount' => 'required|numeric|min:0',
+            'loan_purpose' => 'nullable|string|max:255',
+        ]);
+    
+        $user = Auth::user();
+        $details = $user->getOrCreateUserDetails();
+        $vehicle = Vehicle::findOrFail($request->vehicle_id);
+    
+        $loanAmount = (float) $request->loan_amount; // cast to float
+        $processingFee = round($loanAmount * 0.01);  // 1% of loan
+    
+        // Save application
+        $application = LoanApply::create([
+            'user_id' => $user->id,
+            'vehicle_id' => $vehicle->id,
+            'full_name' => $user->name,
+            'email' => $user->email,
+            'phone' => $details->mobile_money_account ?? '',
+            'id_number' => $details->id_number ?? '',
+            'employment_status' => $details->employment_status ?? '',
+            'company_name' => $details->employer_name ?? '',
+            'monthly_income' => $details->monthly_income ?? 0,
+            'loan_amount' => $loanAmount,
+            'loan_purpose' => $request->loan_purpose,
+        ]);
+    
+        $message = "Your application for {$vehicle->name} has cruised through successfully! 
+To shift gears and start the processing engine, a gentle **KES " . number_format($processingFee) . "** processing fee is needed. 
+Hop onto M-Pesa and pay to Till Number: 123456 using your ID number as reference for a smooth ride.";
+
+$result = $this->sendSMSWithCurl(auth()->user()->phone, $message);
+
+// return $result;
+return redirect()->route('car.loan.apply.loan', $vehicle->id)
+                 ->with('success', $message)
+                 ->with('vehicleName', $vehicle->name);
+
+    }
+
+    
+    public function sendSMSWithCurl($phoneNumber, $message)
+    {
+        $url = 'https://ujumbesms.co.ke/api/messaging'; // Adjust if necessary
+    
+        $headers = [
+            "X-Authorization: YTBkOTE3OGNmNDg3ZDE2Y2NiMGIzNjg1ZTc0Mzg2",
+            "email: developer@automationeye.com",
+            "Cache-Control: no-cache",
+            "Content-Type: application/json"
+        ];
+    
+        $jsonBody = json_encode([
+            "data" => [
+                [
+                    "message_bag" => [
+                        "numbers" => $phoneNumber,  // Use dynamic phone number
+                        "message" => $message,      // Use dynamic message
+                        "sender" => "DEPTHSMS"
+                    ]
+                ]
+            ]
+        ]);
+    
+        $ch = curl_init($url);
+    
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonBody);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    
+        try {
+            $response = curl_exec($ch);
+    
+            if ($response === false) {
+                throw new \Exception(curl_error($ch));
+            }
+    
+            return $response;
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        } finally {
+            curl_close($ch);
+        }
+    }
+    
+
+
     public function carapply($id)
 {
     // Hardcoded vehicle data (later move to DB)
-    $vehicles = [
-        1 => ['id'=>'1', 'name' => 'Toyota Corolla 2020', 'price' => 1200000],
-        2 => ['id'=>'2','name' => 'Nissan X-Trail 2019', 'price' => 1800000],
-        3 => ['id'=>'3','name' => 'Mazda Demio 2018', 'price' => 850000],
-    ];
+    $vehicles = Vehicle::orderBy('id','DESC')->get();
 
     $vehicle = $vehicles[$id] ?? null;
 
@@ -36,11 +239,7 @@ class LoansController extends Controller
 public function processPayment(Request $request, $id)
 {
     // get vehicle price (in real app from DB)
-    $vehicles = [
-        1 => ['name' => 'Toyota Corolla 2020', 'price' => 1200000],
-        2 => ['name' => 'Nissan X-Trail 2019', 'price' => 1800000],
-        3 => ['name' => 'Mazda Demio 2018', 'price' => 850000],
-    ];
+    $vehicles = Vehicle::orderBy('id','DESC')->get();
 
     $vehicle = $vehicles[$id] ?? null;
     if (!$vehicle) abort(404);
@@ -75,29 +274,7 @@ public function processPayment(Request $request, $id)
     public function cars()
 {
     // Example vehicle data (later you can fetch from DB)
-    $vehicles = [
-        [
-            'id' => 1,
-            'name' => 'Toyota Corolla 2020',
-            'price' => 'KES 1,200,000',
-            'image' => 'images/cars/toyota-corolla.jpg',
-            'description' => 'Reliable and fuel efficient sedan perfect for city and long drives.'
-        ],
-        [
-            'id' => 2,
-            'name' => 'Nissan X-Trail 2019',
-            'price' => 'KES 1,800,000',
-            'image' => 'images/cars/nissan-xtrail.jpg',
-            'description' => 'Spacious SUV with modern features and off-road capability.'
-        ],
-        [
-            'id' => 3,
-            'name' => 'Mazda Demio 2018',
-            'price' => 'KES 850,000',
-            'image' => 'images/cars/mazda-demio.jpg',
-            'description' => 'Compact and stylish hatchback, ideal for daily commuting.'
-        ]
-    ];
+    $vehicles = Vehicle::orderBy('id','DESC')->get();
 
     return view('loans.cars', compact('vehicles'));
 }
@@ -107,29 +284,7 @@ public function carDetails($id)
 
     // dd($id);
     // Normally you'd fetch from DB
-    $vehicles = [
-        1 => [
-            'id' => 1,
-            'name' => 'Toyota Corolla 2020',
-            'price' => 'KES 1,200,000',
-            'image' => 'images/cars/toyota-corolla.jpg',
-            'description' => 'Reliable and fuel efficient sedan perfect for city and long drives. Financing available with flexible repayment terms.'
-        ],
-        2 => [
-            'id' => 2,
-            'name' => 'Nissan X-Trail 2019',
-            'price' => 'KES 1,800,000',
-            'image' => 'images/cars/nissan-xtrail.jpg',
-            'description' => 'Spacious SUV with modern features and off-road capability. Available with competitive car loan packages.'
-        ],
-        3 => [
-            'id' => 3,
-            'name' => 'Mazda Demio 2018',
-            'price' => 'KES 850,000',
-            'image' => 'images/cars/mazda-demio.jpg',
-            'description' => 'Compact and stylish hatchback, ideal for daily commuting. Easy financing options available.'
-        ],
-    ];
+    $vehicles = Vehicle::orderBy('id','DESC')->get();
 
     $vehicle = $vehicles[$id] ?? null;
 
@@ -141,10 +296,6 @@ public function carDetails($id)
     return view('loans.car-details', compact('vehicle'));
 }
 
-    public function bodaboda()
-    {
-        return view('loans.bodaboda');
-    }
 
     public function education()
     {

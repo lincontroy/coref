@@ -11,7 +11,12 @@
                         <img src="{{ asset($vehicle['image']) }}" class="card-img-top" alt="{{ $vehicle['name'] }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $vehicle['name'] }}</h5>
-                            <p class="card-text text-muted">{{ $vehicle['price'] }}</p>
+                            <p class="card-text text-muted">KES {{ number_format($vehicle['price']) }}</p>
+                            @if(!empty($vehicle['description']))
+                                <p class="card-text">
+                                    {{ \Illuminate\Support\Str::limit($vehicle['description'], 100, '...') }}
+                                </p>
+                            @endif
                             <a href="{{ route('loan.carDetails', $vehicle['id']) }}" class="btn btn-primary w-100">
                                 View Details
                             </a>

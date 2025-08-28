@@ -16,6 +16,10 @@
                 <p class="fs-5">{{ $vehicle['description'] }}</p>
 
                 <a href="{{ route('car.loan.apply', ['id' => $vehicle['id']]) }}" class="btn btn-success btn-lg mt-3">
+                   Buy via Hire Purchase<i class="bi bi-arrow-right-circle ms-2"></i>
+                </a>
+
+                <a href="{{ route('car.loan.apply.loan', ['id' => $vehicle['id']]) }}" class="btn btn-success btn-lg mt-3">
                     Apply for Loan <i class="bi bi-arrow-right-circle ms-2"></i>
                 </a>
                 

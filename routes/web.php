@@ -48,6 +48,18 @@ Route::middleware(['auth'])->prefix('loans')->group(function() {
     Route::get('/cars', [LoansController::class, 'cars'])->name('loan.cars');
     Route::get('/cars/{id}', [LoansController::class, 'carDetails'])->name('loan.carDetails');
 Route::get('/bodaboda', [LoansController::class, 'bodaboda'])->name('loan.bodaboda');
+Route::post('/bodaboda/apply', [LoansController::class, 'storeBodaBodaLoan'])->name('loan.bodaboda.store');
+Route::get('/bodaboda/{id}', [LoansController::class, 'bodaDetails'])->name('loan.bodaDetails');
+Route::get('/bodaboda/apply/{id}', [LoansController::class, 'applyBodaBodaLoan'])->name('loan.bodaboda.apply');
+// Show loan application form for selected Boda Boda
+Route::get('/bodaboda/apply/{id}', [LoansController::class, 'applyBodaBodaLoan'])->name('loan.bodaboda.apply');
+
+Route::get('/bodaboda/apply/loan/{id}', [LoansController::class, 'bodaLoanApply'])->name('boda.loan.apply.loan');
+Route::post('/bodaboda/process-payment/{id}', [LoansController::class, 'processBodaDeposit'])->name('boda.loan.processPayment');
+
+// Store loan application
+Route::post('/bodaboda/store', [LoansController::class, 'storeBodaBodaLoan'])->name('loan.bodaboda.store');
+
 Route::get('/education', [LoansController::class, 'education'])->name('loan.education');
 Route::get('/kilimo', [LoansController::class, 'kilimo'])->name('loan.kilimo');
 Route::get('/emergency', [LoansController::class, 'emergency'])->name('loan.emergency');
@@ -57,8 +69,11 @@ Route::get('/business', [LoansController::class, 'business'])->name('loan.busine
     Route::get('/apply', [LoansController::class, 'showApplicationForm'])->name('loan.apply');
     Route::post('/apply', [LoansController::class, 'apply'])->name('loan.submit');
     Route::get('/car/apply/{id}', [LoansController::class, 'carapply'])->name('car.loan.apply');
+    Route::get('/car/apply/loan/{id}', [LoansController::class, 'loancarapply'])->name('car.loan.apply.loan');
     Route::post('/apply/{id}/pay', [LoansController::class, 'processPayment'])->name('loan.processPayment');
-    
+    Route::post('/car/apply/loan/store', [LoansController::class, 'storeLoanApplication'])
+    ->name('car.loan.apply.loan.store');
+
     Route::post('/{loan}/payment', [LoansController::class, 'processPayment'])->name('loan.payment');
     Route::get('/offer/{loan}', [LoansController::class, 'showOffer'])->name('loan.offer');
     Route::get('/pay-fee/{loan}', [LoansController::class, 'payFee'])->name('loan.pay_fee');
