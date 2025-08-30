@@ -15,6 +15,47 @@ use Illuminate\Support\Facades\DB;
 class LoansController extends Controller
 {
 
+    public function otherapply(Request $request)
+{
+    $request->validate([
+        'purpose' => 'required|string|max:255',
+        'requested_amount' => 'required|numeric|min:1000',
+        'repayment_period' => 'required|integer|min:1',
+        'notes' => 'nullable|string|max:500',
+    ]);
+
+    $loan = Loans::create([
+        'user_id'          => Auth::id(),
+        'purpose'          => $request->purpose,
+        'requested_amount' => $request->requested_amount,
+        'approved_amount'  => $request->requested_amount, // for now same
+        'repayment_period' => $request->repayment_period,
+        'application_fee'  => 0, // can calculate later
+        'fee_paid'         => 0,
+        'status'           => 'pending',
+        'disbursed_at'     => null,
+        'due_date'         => now()->addMonths($request->repayment_period),
+    ]);
+
+
+    $fee=($request->requested_amount*0.15);
+
+    $user=auth()->user()->name;
+
+
+    // Send SMS
+    $phone = auth()->user()->phone;
+    $phone = preg_replace('/^0/', '254', $phone); // format to 254
+
+    $smsMessage = "Hello {$user}, your {$request->purpose} application for {$request->requested_amount} has been submitted successfully. Please pay KES " . number_format($fee) . " processing fee to till number 23456 to get the loan!";
+    $this->sendSMSWithCurl($phone, $smsMessage);
+
+
+
+    return redirect()->back()->with('success', 'Loan application submitted successfully! Check sms for further instructions.');
+}
+
+
     public function bodaLoanApply($id)
 {
     $boda = BodaBoda::findOrFail($id);

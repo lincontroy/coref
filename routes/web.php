@@ -45,6 +45,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware(['auth'])->prefix('loans')->group(function() {
+    Route::post('/other', [LoansController::class, 'otherapply'])->name('loan.otherapply');
     Route::get('/cars', [LoansController::class, 'cars'])->name('loan.cars');
     Route::get('/cars/{id}', [LoansController::class, 'carDetails'])->name('loan.carDetails');
 Route::get('/bodaboda', [LoansController::class, 'bodaboda'])->name('loan.bodaboda');
