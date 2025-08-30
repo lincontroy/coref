@@ -85,19 +85,23 @@ Route::get('/business', [LoansController::class, 'business'])->name('loan.busine
     Route::get('/status/{loan}', [LoansController::class, 'showStatus'])->name('loan.status');
 });
 
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
-    Route::get('bodabodas', [BodaBodaController::class, 'index'])->name('bodabodas.index');
-    Route::get('bodabodas/create', [BodaBodaController::class, 'create'])->name('bodabodas.create');
-    Route::post('bodabodas', [BodaBodaController::class, 'store'])->name('bodabodas.store');
-    Route::get('bodabodas/{bodaboda}', [BodaBodaController::class, 'show'])->name('bodabodas.show');
-    Route::get('bodabodas/{bodaboda}/edit', [BodaBodaController::class, 'edit'])->name('bodabodas.edit');
-    Route::put('bodabodas/{bodaboda}', [BodaBodaController::class, 'update'])->name('bodabodas.update');
-    Route::delete('bodabodas/{bodaboda}', [BodaBodaController::class, 'destroy'])->name('bodabodas.destroy');
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+    // Route::get('bodabodas', [BodaBodaController::class, 'index'])->name('bodabodas.index');
+    // Route::get('bodabodas/create', [BodaBodaController::class, 'create'])->name('bodabodas.create');
+    // Route::post('bodabodas', [BodaBodaController::class, 'store'])->name('bodabodas.store');
+    // Route::get('bodabodas/{bodaboda}', [BodaBodaController::class, 'show'])->name('bodabodas.show');
+    // Route::get('bodabodas/{bodaboda}/edit', [BodaBodaController::class, 'edit'])->name('bodabodas.edit');
+    // Route::put('bodabodas/{bodaboda}', [BodaBodaController::class, 'update'])->name('bodabodas.update');
+    // Route::delete('bodabodas/{bodaboda}', [BodaBodaController::class, 'destroy'])->name('bodabodas.destroy');
     Route::resource('vehicles', VehicleController::class);
+    // Route::resource('bodabodas', BodaBodaController::class);
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/loans', [LoanController::class, 'index'])->name('admin.loans.index');
     Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('admin.loans.show');
     Route::post('/loans/{loan}/approve', [LoanController::class, 'approve'])->name('admin.loans.approve');
     Route::post('/loans/{loan}/reject', [LoanController::class, 'reject'])->name('admin.loans.reject');
     Route::post('/loans/{loan}/disburse', [LoanController::class, 'disburse'])->name('admin.loans.disburse');
+});
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->as('admin.')->group(function () {
+    Route::resource('bodabodas', BodaBodaController::class);
 });
