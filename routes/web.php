@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoansController;
+use App\Http\Controllers\VehicleController;
+use App\Http\Controllers\BodaBodaController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\LoanController;
 
@@ -83,7 +85,15 @@ Route::get('/business', [LoansController::class, 'business'])->name('loan.busine
     Route::get('/status/{loan}', [LoansController::class, 'showStatus'])->name('loan.status');
 });
 
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->group(function () {
+    Route::get('bodabodas', [BodaBodaController::class, 'index'])->name('bodabodas.index');
+    Route::get('bodabodas/create', [BodaBodaController::class, 'create'])->name('bodabodas.create');
+    Route::post('bodabodas', [BodaBodaController::class, 'store'])->name('bodabodas.store');
+    Route::get('bodabodas/{bodaboda}', [BodaBodaController::class, 'show'])->name('bodabodas.show');
+    Route::get('bodabodas/{bodaboda}/edit', [BodaBodaController::class, 'edit'])->name('bodabodas.edit');
+    Route::put('bodabodas/{bodaboda}', [BodaBodaController::class, 'update'])->name('bodabodas.update');
+    Route::delete('bodabodas/{bodaboda}', [BodaBodaController::class, 'destroy'])->name('bodabodas.destroy');
+    Route::resource('vehicles', VehicleController::class);
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/loans', [LoanController::class, 'index'])->name('admin.loans.index');
     Route::get('/loans/{loan}', [LoanController::class, 'show'])->name('admin.loans.show');

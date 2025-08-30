@@ -142,7 +142,7 @@ public function storeBodaBodaLoan(Request $request)
     $this->sendSMSWithCurl($phone, $smsMessage);
 
     // Redirect with success message and fee
-    $message = "Your Boda Boda loan application for <strong>{$boda->name}</strong> has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 123456 using your ID number.";
+    $message = "Your Boda Boda loan application for {$boda->name} has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 123456 using your ID number.";
 
     return redirect()->route('loan.bodaboda.apply', $boda->id)
                      ->with('success', $message)

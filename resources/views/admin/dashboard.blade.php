@@ -69,6 +69,7 @@
                             <th>ID</th>
                             <th>User</th>
                             <th>Amount</th>
+                            <th>Purpose</th>
                             <th>Status</th>
                             <th>Applied On</th>
                             <th>Actions</th>
@@ -80,6 +81,7 @@
                             <td>#{{ $loan->id }}</td>
                             <td>{{ $loan->user->name }}</td>
                             <td>KES {{ number_format($loan->requested_amount, 2) }}</td>
+                            <td>{{ $loan->purpose }}</td>
                             <td>
                                 <span class="badge badge-{{ 
                                     $loan->status == 'approved' ? 'success' : 
@@ -88,6 +90,7 @@
                                     {{ ucfirst($loan->status) }}
                                 </span>
                             </td>
+                           
                             <td>{{ $loan->created_at->format('M d, Y') }}</td>
                             <td>
                                 <a href="{{ route('admin.loans.show', $loan) }}" class="btn btn-sm btn-info">

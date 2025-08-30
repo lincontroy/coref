@@ -13,12 +13,7 @@ class BodaBoda extends Model
     protected $table = 'boda_bodas';
 
     // Mass assignable fields
-    protected $fillable = [
-        'name',
-        'price',
-        'description',
-        'image',
-    ];
+    protected $guarded = [];
 
     // Casts (optional)
     protected $casts = [

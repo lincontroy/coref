@@ -40,12 +40,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <!-- Left navbar links -->
                     <ul class="navbar-nav  ml-auto">
                         <li class="nav-item">
-                            <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard</a>
+                            <a href="{{ url('admin/dashboard') }}" class="nav-link">Dashboard</a>
                         </li>
 
                         <li class="nav-item">
-                        <a href="{{ route('admin.loans.index') }}" class="nav-link">Loans</a>
+                        <a href="{{ url('admin/vehicles') }}" class="nav-link">Vehicles</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a href="{{ url('admin/bodabodas') }}" class="nav-link">BodaBodas</a>
+                            </li>
+
+                        <li class="nav-item">
+                            <a href="{{ url('admin/loans') }}" class="nav-link">Loans</a>
+                            </li>
                       
                         <li class="nav-item">
                             <a href="{{ route('logout') }}" class="nav-link">Logout</a>
