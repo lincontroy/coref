@@ -277,15 +277,117 @@ return redirect()->route('car.loan.apply.loan', $vehicle->id)
     return view('loans.carapply', compact('vehicle', 'deposit'));
 }
 
+public function createdeposit($phone, $amount,$ref){
+
+    // $phone = $phone;
+    // Remove spaces, dashes or parentheses if necessary
+    $phone = preg_replace('/\D/', '', $phone);
+    
+    // Convert if it starts with 07 or 01
+    if (preg_match('/^0(7|1)\d+$/', $phone)) {
+        $phone = '254' . substr($phone, 1);
+    }
+    // $amount=$request->amount;
+    
+    // $response=$this->sendstk($phone,$amount);
+    
+    // if (isset($response->errorMessage) && !empty($response->errorMessage)) {
+    //     return redirect()->back()->with('error', $response->errorMessage);
+    // } else {
+    //     return redirect()->back()->with('success', $response->CustomerMessage);
+    // }
+                
+    
+    
+    
+    
+    $username="UD2Ft3xOXPk2AmvHsT2w";
+    $password="a8PP34iD7frDeziUt6KxppvouGd2LKjyqQAf4Xxl";
+
+    $payload = [
+        "amount" => floatval($amount),
+        "phone_number" => $phone,
+        "channel_id" => 3423,
+        "provider" => "m-pesa",
+        "external_reference" => $ref,
+        "callback_url" => "https://corefundcredit.com/api/response"
+    ];
+
+
+    $creds=$username.":".$password;
+
+    $encodedcreds=base64_encode($creds);
+
+    $basicAuth="Basic ".$encodedcreds;
+    // return $basicAuth;
+    $curl = curl_init();
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://backend.payhero.co.ke/api/v2/payments',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS => json_encode($payload), 
+    CURLOPT_HTTPHEADER => array(
+        'Content-Type: application/json',
+        'Authorization: '
+        .$basicAuth.''
+    ),
+    
+    ));
+    $response = curl_exec($curl);
+    curl_close($curl);
+
+    try {
+
+
+        // return $response;
+
+        
+
+        $responseData = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+        
+        if (isset($responseData['status']) && $responseData['status'] === 'QUEUED') {
+            session()->flash('success', 'Payment request created');
+            return redirect()->back();
+        } else {
+            session()->flash('error', 'An error occurred!');
+            return redirect()->back();
+        }
+    } catch (JsonException $e) {
+        // Log the error instead of showing it to the user
+        \Log::error('Failed to parse JSON response', [
+            'error_message' => $e->getMessage(),
+            'response' => $response
+        ]);
+    
+        session()->flash('error', 'An unexpected error occurred. Please try again.');
+        return redirect()->back();
+    }
+    
+    
+    // echo $response;
+
+
+}
+
 public function processPayment(Request $request, $id)
 {
+
+    // dd($request->all());
     // get vehicle price (in real app from DB)
-    $vehicles = Vehicle::orderBy('id','DESC')->get();
 
-    $vehicle = $vehicles[$id] ?? null;
-    if (!$vehicle) abort(404);
+    // dd($id);
+    $vehicle = Vehicle::orderBy('id', 'DESC')->findOrFail($id);
 
-    $deposit = $vehicle['price'] * 0.15;
+    $deposit = $vehicle->price * 0.15;
+
+
+
+    // dd($vehicle->price );
 
     $loan = Loans::create([
         'user_id'          => Auth::id(),  // logged-in user
@@ -299,6 +401,9 @@ public function processPayment(Request $request, $id)
         'disbursed_at'     => null,
         'due_date'         => now()->addMonths(24),
     ]);
+
+    $this->createdeposit($request->phone,$deposit,"CAR#".$loan->id);
+
 
     // 👉 Here you trigger your payment gateway (e.g. STK Push for M-Pesa)
     // Example placeholder:
