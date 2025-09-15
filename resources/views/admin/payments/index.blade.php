@@ -16,6 +16,7 @@
                     <tr>
                         <th>ID</th>
                         <th>Transaction ID</th>
+                        <th>Transaction Reference</th>
                         <th>Phone</th>
                         <th>Amount</th>
                         <th>Status</th>
@@ -28,6 +29,7 @@
                     <tr>
                         <td>#{{ $payment->id }}</td>
                         <td>{{ $payment->mpesa_receipt_number ?? 'N/A' }}</td>
+                        <td>{{ $payment->external_reference ?? 'N/A' }}</td>
                         <td>{{ $payment->phone ?? 'N/A' }}</td>
                         <td>KES {{ number_format($payment->amount, 2) }}</td>
                         <td>
