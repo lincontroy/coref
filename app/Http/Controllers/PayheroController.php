@@ -9,16 +9,25 @@ class PayheroController extends Controller
 {
     public function handleCallback(Request $request)
     {
-        // Capture full payload
         $payload = $request->all();
 
+        // PayHero puts actual data inside "response"
+        $response = $payload['response'] ?? [];
+
         PayheroResponse::create([
-            'transaction_id' => $payload['transaction_id'] ?? null,
-            'status'         => $payload['status'] ?? null,
-            'phone_number'   => $payload['phone_number'] ?? null,
-            'amount'         => $payload['amount'] ?? null,
-            'reference'      => $payload['reference'] ?? null,
-            'raw_response'   => json_encode($payload),
+            'merchant_request_id'     => $response['MerchantRequestID'] ?? null,
+            'checkout_request_id'     => $response['CheckoutRequestID'] ?? null,
+            'result_code'             => $response['ResultCode'] ?? null,
+            'amount'                  => $response['Amount'] ?? null,
+            'mpesa_receipt_number'    => $response['MpesaReceiptNumber'] ?? null,
+            'phone'                   => $response['Phone'] ?? null,
+            'external_reference'      => $response['ExternalReference'] ?? null,
+            'status'                  => $response['Status'] ?? null,
+            'result_desc'             => $response['ResultDesc'] ?? null,
+            'service_wallet_balance'  => $response['ServiceWalletBalance'] ?? null,
+            'payment_wallet_balance'  => $response['PaymentWalletBalance'] ?? null,
+            'channel_id'              => $response['ChannelID'] ?? null,
+            'raw_response'            => json_encode($payload),
         ]);
 
         return response()->json(['success' => true]);
