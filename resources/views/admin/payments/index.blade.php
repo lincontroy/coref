@@ -1,6 +1,9 @@
 <?php 
     $payments = App\Models\PayheroResponse::orderBy('id','DESC')->get();
 ?>
+@extends('layouts.admin')
+
+@section('content')
 
 <div class="card shadow mb-4">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
@@ -60,3 +63,5 @@ $(document).ready(function() {
 });
 </script>
 @endpush
+
+@endsection
