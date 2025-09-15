@@ -44,6 +44,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         </li>
 
                         <li class="nav-item">
+                            <a href="{{ url('admin/payments') }}" class="nav-link">Payments</a>
+                        </li>
+
+                        <li class="nav-item">
                         <a href="{{ url('admin/vehicles') }}" class="nav-link">Vehicles</a>
                         </li>
 

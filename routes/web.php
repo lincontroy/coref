@@ -86,6 +86,10 @@ Route::get('/business', [LoansController::class, 'business'])->name('loan.busine
 });
 
 Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+
+    Route::get('/payments', function () {
+        return view('admin.payments.index');
+    });
     // Route::get('bodabodas', [BodaBodaController::class, 'index'])->name('bodabodas.index');
     // Route::get('bodabodas/create', [BodaBodaController::class, 'create'])->name('bodabodas.create');
     // Route::post('bodabodas', [BodaBodaController::class, 'store'])->name('bodabodas.store');
