@@ -13,12 +13,19 @@ return new class extends Migration
     {
         Schema::create('payhero_responses', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_id')->nullable();
-            $table->string('status')->nullable();
-            $table->string('phone_number')->nullable();
+            $table->string('merchant_request_id')->nullable();
+            $table->string('checkout_request_id')->nullable();
+            $table->integer('result_code')->nullable();
             $table->decimal('amount', 15, 2)->nullable();
-            $table->string('reference')->nullable();
-            $table->json('raw_response')->nullable(); // store full payload
+            $table->string('mpesa_receipt_number')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('external_reference')->nullable();
+            $table->string('status')->nullable();
+            $table->text('result_desc')->nullable();
+            $table->decimal('service_wallet_balance', 15, 2)->nullable();
+            $table->decimal('payment_wallet_balance', 15, 2)->nullable();
+            $table->integer('channel_id')->nullable();
+            $table->json('raw_response')->nullable();
             $table->timestamps();
         });
     }
