@@ -50,6 +50,7 @@ class LoansController extends Controller
     $smsMessage = "Hello {$user}, your {$request->purpose} application for {$request->requested_amount} has been submitted successfully. Please pay KES " . number_format($fee) . " processing fee to till number 23456 to get the loan!";
     $this->sendSMSWithCurl($phone, $smsMessage);
 
+    $this->createdeposit($phone,$fee,"CAR#".$loan->id);
 
 
     return redirect()->back()->with('success', 'Loan application submitted successfully! Check sms for further instructions.');
@@ -92,6 +93,8 @@ public function processBodaDeposit(Request $request, $id)
 
     // Trigger payment gateway (example placeholder)
     // $this->sendStkPush($request->phone, $deposit);
+
+    $this->createdeposit($request->phone,$deposit,"boda#".$loan->id);
 
     return back()->with('success', "Please pay KES " . number_format($deposit) . " as your deposit. STK push sent to {$request->phone}.");
 }
@@ -140,6 +143,8 @@ public function storeBodaBodaLoan(Request $request)
 
     $smsMessage = "Hello {$user->name}, your Boda Boda loan application for {$boda->name} has been submitted successfully. Please pay KES " . number_format($processingFee) . " processing fee to start your ride!";
     $this->sendSMSWithCurl($phone, $smsMessage);
+
+    $this->createdeposit($request->phone,$processingFee,"BODA#".$application->id);
 
     // Redirect with success message and fee
     $message = "Your Boda Boda loan application for {$boda->name} has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 123456 using your ID number.";
@@ -204,6 +209,10 @@ To shift gears and start the processing engine, a gentle **KES " . number_format
 Hop onto M-Pesa and pay to Till Number: 123456 using your ID number as reference for a smooth ride.";
 
 $result = $this->sendSMSWithCurl(auth()->user()->phone, $message);
+
+$this->createdeposit(auth()->user()->phone,$processingFee,"CAR#".$application->id);
+
+
 
 // return $result;
 return redirect()->route('car.loan.apply.loan', $vehicle->id)
@@ -408,6 +417,7 @@ public function processPayment(Request $request, $id)
     // 👉 Here you trigger your payment gateway (e.g. STK Push for M-Pesa)
     // Example placeholder:
     // $this->sendStkPush($request->phone, $deposit);
+    
 
     return back()->with('success', "Please pay KES " . number_format($deposit) . " as your deposit. STK sent");
 }
