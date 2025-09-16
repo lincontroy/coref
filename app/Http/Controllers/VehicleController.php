@@ -67,6 +67,7 @@ class VehicleController extends Controller
 
         $vehicle->update([
             'name'  => $request->name,
+            'description'  => $request->description,
             'price' => $request->price,
             'image' => $imagePath,
         ]);

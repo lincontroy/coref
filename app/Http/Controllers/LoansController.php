@@ -440,9 +440,7 @@ public function carDetails($id)
 
     // dd($id);
     // Normally you'd fetch from DB
-    $vehicles = Vehicle::orderBy('id','DESC')->get();
-
-    $vehicle = $vehicles[$id] ?? null;
+    $vehicle = Vehicle::find($id);
 
     if (!$vehicle) {
         abort(404);
