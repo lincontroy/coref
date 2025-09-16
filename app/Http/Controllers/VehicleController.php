@@ -36,7 +36,7 @@ class VehicleController extends Controller
 
         Vehicle::create([
             'name'  => $request->name,
-            'name'  => $request->description,
+            'description'  => $request->description,
             'price' => $request->price,
             'image' => $imagePath,
         ]);
