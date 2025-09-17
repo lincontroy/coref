@@ -272,9 +272,7 @@ return redirect()->route('car.loan.apply.loan', $vehicle->id)
     public function carapply($id)
 {
     // Hardcoded vehicle data (later move to DB)
-    $vehicles = Vehicle::orderBy('id','DESC')->get();
-
-    $vehicle = $vehicles[$id] ?? null;
+    $vehicle = Vehicle::orderBy('id', 'DESC')->findOrFail($id);
 
     if (!$vehicle) {
         abort(404);

@@ -21,6 +21,8 @@ class BodaBodaController extends Controller
 
     public function store(Request $request)
     {
+
+        // dd($request->all());
         $request->validate([
             'name'        => 'required|string|max:255',
             'price'       => 'required|numeric|min:0',
@@ -31,10 +33,19 @@ class BodaBodaController extends Controller
         $data = $request->all();
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('/images/bodas', 'public');
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/bodas'), $imageName);
+            $imagePath = 'images/bodas/' . $imageName;
         }
 
-        BodaBoda::create($data);
+        // BodaBoda::create($data);
+
+        BodaBoda::create([
+            'name'  => $request->name,
+            'description'  => $request->description,
+            'price' => $request->price,
+            'image' => $imagePath,
+        ]);
 
         return redirect()->route('admin.bodabodas.index')
             ->with('success', 'BodaBoda created successfully.');
@@ -61,11 +72,21 @@ class BodaBodaController extends Controller
 
         $data = $request->all();
 
+        $imagePath = $bodaboda->image;
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('bodabodas', 'public');
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('images/bodas'), $imageName);
+            $imagePath = 'images/bodas/' . $imageName;
         }
 
-        $bodaboda->update($data);
+        // $bodaboda->update($data);
+
+        $bodaboda->update([
+            'name'  => $request->name,
+            'description'  => $request->description,
+            'price' => $request->price,
+            'image' => $imagePath,
+        ]);
 
         return redirect()->route('admin.bodabodas.index')
             ->with('success', 'BodaBoda updated successfully.');
