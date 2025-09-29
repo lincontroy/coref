@@ -518,5 +518,245 @@
             </div>
         </div>
     </section>
+    <!-- Contact Us Section Start -->
+<section class="contact-us section" id="contact">
+    <div class="animation">
+        <img src="assets/images/hero_vector_dollar.png" alt="Image">
+        <img src="assets/images/hero_vector_message.png" alt="Image">
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-6 col-xxl-5">
+                <div class="section__header">
+                    <span class="section__header-sub-title headingFour wow fadeInDown" data-wow-duration="0.8s">
+                        <img src="assets/images/title_vector.png" alt="vector"> Contact Us
+                    </span>
+                    <h2 class="section__header-title wow fadeInUp" data-wow-duration="0.8s">Get In Touch With Us</h2>
+                    <p class="section__header-content wow fadeInDown" data-wow-duration="0.8s">
+                        Have questions or need assistance? Our team is here to help you with all your loan needs.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row gy-5 gy-lg-0 align-items-center justify-content-between">
+            <div class="col-12 col-lg-6">
+                <div class="section__content ms-lg-4 ms-xl-0">
+                    <div class="contact-info">
+                        <div class="contact-item wow fadeInUp" data-wow-duration="0.8s">
+                            <div class="contact-icon">
+                                <i class="bi bi-telephone-fill"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h5>Phone Support</h5>
+                                <p>Call us directly for immediate assistance</p>
+                                <a href="tel:0117855269" class="contact-link">011 785 5269</a>
+                            </div>
+                        </div>
+                        <div class="contact-item wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.1s">
+                            <div class="contact-icon">
+                                <i class="bi bi-whatsapp"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h5>WhatsApp</h5>
+                                <p>Chat with us on WhatsApp for quick responses</p>
+                                <a href="https://wa.me/254117855269" class="contact-link" target="_blank">+254 117 855 269</a>
+                            </div>
+                        </div>
+                        <div class="contact-item wow fadeInUp" data-wow-duration="0.8s" data-wow-delay="0.2s">
+                            <div class="contact-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </div>
+                            <div class="contact-content">
+                                <h5>Email</h5>
+                                <p>Send us an email and we'll respond promptly</p>
+                                <a href="mailto:support@corefundcredit.com" class="contact-link">support@corefundcredit.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+     
+        </div>
+    </div>
+</section>
+<!-- Contact Us Section End -->
+
+<!-- Support Widgets -->
+<div class="support-widgets">
+    <!-- WhatsApp Widget -->
+    <a href="https://wa.me/254117855269" class="whatsapp-widget" target="_blank" title="Chat with us on WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+    </a>
+    
+    <!-- Phone Call Widget -->
+    <a href="tel:0117855269" class="call-widget" title="Call us">
+        <i class="bi bi-telephone-fill"></i>
+    </a>
+</div>
+
+<style>
+
+    /* Contact Us Section Styles */
+.contact-us {
+    background-color: #f8f9fa;
+    padding: 80px 0;
+}
+
+.contact-info {
+    margin-bottom: 30px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateY(-5px);
+}
+
+.contact-icon {
+    width: 60px;
+    height: 60px;
+    background: #074C3E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.contact-icon i {
+    color: white;
+    font-size: 24px;
+}
+
+.contact-content h5 {
+    color: #074C3E;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.contact-content p {
+    color: #666;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.contact-link {
+    color: #074C3E;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+    color: #053228;
+    text-decoration: underline;
+}
+
+.contact-form {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #074C3E;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #074C3E;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(7, 76, 62, 0.1);
+}
+
+/* Support Widgets */
+.support-widgets {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.whatsapp-widget, .call-widget {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.whatsapp-widget {
+    background: #25D366;
+}
+
+.call-widget {
+    background: #074C3E;
+}
+
+.whatsapp-widget:hover, .call-widget:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+    color: white;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .contact-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .contact-icon {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .support-widgets {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .whatsapp-widget, .call-widget {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}
+</style>
 
     @endsection
