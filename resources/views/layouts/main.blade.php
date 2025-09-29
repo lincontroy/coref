@@ -116,7 +116,7 @@
                             </li>
                            
                             <li class="menu_item">
-                                <a class="menu_link" href="/contact">contact us</a>
+                                <a class="menu_link" href="/#contact">contact us</a>
                             </li>
                             <li class="menu_item">
                                 <a class="menu_link" href="/register">sign in</a>
