@@ -135,16 +135,10 @@
                         <ul class="custom-nevbar__right-location">
                             <li>
                                 <p class="mb-2">Phone: </p>
-                                <a href="tel:+123456789" class="fs-4 contact">+123 456 789</a>
+                                <a href="tel:+254 117 855 269" class="fs-4 contact">+254 117 855 269</a>
                             </li>
-                            <li class="location">
-                                <p class="mb-2">Email: </p>
-                                <a href="https://pixner.net/cdn-cgi/l/email-protection#7a33141c153a1d171b131654191517" class="fs-4 contact"><span class="__cf_email__" data-cfemail="753c1b131a351218141c195b161a18">[email&#160;protected]</span></a>
-                            </li>
-                            <li class="location">
-                                <p class="mb-2">Location: </p>
-                                <p class="fs-4 contact">6391 Celina, Delaware 10299</p>
-                            </li>
+                            
+                            
                         </ul>
                     </div>
                 </div>
@@ -169,10 +163,10 @@
                         </div>
                         <div class="quick-link order-1 order-lg-0">
                             <ul class="quick-link__list">
-                                <li><a href="contact.html">Help & Support</a></li>
-                                <li><a href="loan-reviews.html">Privacy policy</a></li>
-                                <li><a href="loan-comparison.html">Terms & Conditions</a></li>
-                                <li><a href="contact.html">Contact us</a></li>
+                                <li><a href="/#contact">Help & Support</a></li>
+                                <li><a href="/#contact">Privacy policy</a></li>
+                                <li><a href="/#contact">Terms & Conditions</a></li>
+                                <li><a href="/#contact">Contact us</a></li>
                             </ul>
                         </div>
                         <div class="social">
