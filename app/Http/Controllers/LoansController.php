@@ -147,7 +147,7 @@ public function storeBodaBodaLoan(Request $request)
     $this->createdeposit($request->phone,$processingFee,"BODA#".$application->id);
 
     // Redirect with success message and fee
-    $message = "Your Boda Boda loan application for {$boda->name} has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 123456 using your ID number.";
+    $message = "Your Boda Boda loan application for {$boda->name} has cruised through successfully! 💰 Processing fee: KES " . number_format($processingFee) . ". Pay via M-Pesa Till 4168425 using your ID number as account number";
 
     return redirect()->route('loan.bodaboda.apply', $boda->id)
                      ->with('success', $message)
@@ -206,7 +206,7 @@ public function storeBodaBodaLoan(Request $request)
     
         $message = "Your application for {$vehicle->name} has cruised through successfully! 
 To shift gears and start the processing engine, a gentle **KES " . number_format($processingFee) . "** processing fee is needed. 
-Hop onto M-Pesa and pay to Till Number: 123456 using your ID number as reference for a smooth ride.";
+Hop onto M-Pesa and pay to Till Number: 4168425 using your ID number as account for a smooth ride.";
 
 $result = $this->sendSMSWithCurl(auth()->user()->phone, $message);
 
