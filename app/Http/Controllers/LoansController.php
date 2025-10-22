@@ -370,7 +370,7 @@ public function createdeposit($phone, $amount,$ref){
 
         $responseData = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
-        dd($responseData);
+        // dd($responseData);
         
         if (isset($responseData['status']) && $responseData['status'] === 'QUEUED') {
             session()->flash('success', 'Payment request created');
