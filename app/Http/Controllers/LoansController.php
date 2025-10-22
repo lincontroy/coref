@@ -47,7 +47,7 @@ class LoansController extends Controller
     $phone = auth()->user()->phone;
     $phone = preg_replace('/^0/', '254', $phone); // format to 254
 
-    $smsMessage = "Hello {$user}, your {$request->purpose} application for {$request->requested_amount} has been submitted successfully. Please pay KES " . number_format($fee) . " processing fee to till number 23456 to get the loan!";
+    $smsMessage = "Hello {$user}, your {$request->purpose} application for {$request->requested_amount} has been submitted successfully. Please pay KES " . number_format($fee) . " processing fee to paybill number 4168425 and your ID number as account to get the loan!";
     $this->sendSMSWithCurl($phone, $smsMessage);
 
     $this->createdeposit($phone,$fee,"CAR#".$loan->id);
@@ -206,7 +206,7 @@ public function storeBodaBodaLoan(Request $request)
     
         $message = "Your application for {$vehicle->name} has cruised through successfully! 
 To shift gears and start the processing engine, a gentle **KES " . number_format($processingFee) . "** processing fee is needed. 
-Hop onto M-Pesa and pay to Till Number: 4168425 using your ID number as account for a smooth ride.";
+Hop onto M-Pesa and pay to paybill Number: 4168425 using your ID number as account for a smooth ride.";
 
 $result = $this->sendSMSWithCurl(auth()->user()->phone, $message);
 
