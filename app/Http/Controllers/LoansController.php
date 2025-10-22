@@ -286,6 +286,13 @@ return redirect()->route('car.loan.apply.loan', $vehicle->id)
 
 public function createdeposit($phone, $amount,$ref){
 
+    if(empty($phone)){
+        $phone=Auth::user()->phone;
+    }
+    
+
+    
+
     // $phone = $phone;
     // Remove spaces, dashes or parentheses if necessary
     $phone = preg_replace('/\D/', '', $phone);
@@ -294,6 +301,8 @@ public function createdeposit($phone, $amount,$ref){
     if (preg_match('/^0(7|1)\d+$/', $phone)) {
         $phone = '254' . substr($phone, 1);
     }
+
+    // dd("Creating deposit for $phone amount $amount ref $ref");
     // $amount=$request->amount;
     
     // $response=$this->sendstk($phone,$amount);
@@ -348,14 +357,20 @@ public function createdeposit($phone, $amount,$ref){
     $response = curl_exec($curl);
     curl_close($curl);
 
+    // dd($response);  
+
     try {
 
 
         // return $response;
 
+        // dd($response);
+
         
 
         $responseData = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+
+        dd($responseData);
         
         if (isset($responseData['status']) && $responseData['status'] === 'QUEUED') {
             session()->flash('success', 'Payment request created');
